@@ -5,5 +5,5 @@
 
 macos version : 10.7 and later
 
-#待实现的功能
+## 待实现的功能
 1.如果控制优先压缩某一个splitItem？
