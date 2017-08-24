@@ -14,8 +14,6 @@
 @property (retain) NSMutableArray* internalConstraints;
 @property (retain) NSMutableArray* sizingConstraints;
 @property (retain) NSLayoutConstraint* draggingConstraint;
-@property (retain) NSLayoutConstraint* preViewConstraint;
-@property (retain) NSLayoutConstraint* nextViewConstraint;
 @end
 
 @implementation FFSplitView
@@ -443,43 +441,13 @@
         if (_vertical){
             _draggingConstraint = [[[NSLayoutConstraint constraintsWithVisualFormat:@"H:[theView]-10-|" options:0 metrics:nil views:@{@"theView":theView}] lastObject] retain];
             _draggingConstraint.constant = NSWidth(self.bounds) - location.x + _dividerWidth/2.f;
-            
-            _preViewConstraint = [[NSLayoutConstraint constraintWithItem:theView attribute:NSLayoutAttributeLeading
-                                                               relatedBy:NSLayoutRelationEqual
-                                                                  toItem:self
-                                                               attribute:NSLayoutAttributeLeading
-                                                              multiplier:1.0
-                                                                constant:NSMinX(theView.frame)] retain];
-            _nextViewConstraint = [[NSLayoutConstraint constraintWithItem:nextView attribute:NSLayoutAttributeTrailing
-                                                                relatedBy:NSLayoutRelationEqual
-                                                                   toItem:self
-                                                                attribute:NSLayoutAttributeLeading
-                                                               multiplier:1.0
-                                                                 constant:NSMaxX(nextView.frame)] retain];
         }
         else{
             _draggingConstraint = [[[NSLayoutConstraint constraintsWithVisualFormat:@"V:[theView]-10-|" options:0 metrics:nil views:@{@"theView":theView}] lastObject] retain];
             _draggingConstraint.constant = NSHeight(self.bounds) - location.y + _dividerWidth/2.f;
-            
-            _preViewConstraint = [[NSLayoutConstraint constraintWithItem:theView attribute:NSLayoutAttributeTop
-                                                               relatedBy:NSLayoutRelationEqual
-                                                                  toItem:self
-                                                               attribute:NSLayoutAttributeTop
-                                                              multiplier:1.0
-                                                                constant:NSMinY(theView.frame)] retain];
-            _nextViewConstraint = [[NSLayoutConstraint constraintWithItem:nextView attribute:NSLayoutAttributeTop
-                                                                relatedBy:NSLayoutRelationEqual
-                                                                   toItem:self
-                                                                attribute:NSLayoutAttributeTop
-                                                               multiplier:1.0
-                                                                 constant:NSMaxY(nextView.frame)] retain];
         }
         [_draggingConstraint setPriority:NSLayoutPriorityDragThatCannotResizeWindow];
-        [_preViewConstraint setPriority:NSLayoutPriorityDragThatCannotResizeWindow-1];
-        [_nextViewConstraint setPriority:NSLayoutPriorityDragThatCannotResizeWindow-1];
         [self addConstraint:_draggingConstraint];
-        [self addConstraint:_preViewConstraint];
-        [self addConstraint:_nextViewConstraint];
         [self setNeedsDisplay:YES];
     }
 }
